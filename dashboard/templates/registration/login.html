@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Login - FitTrack{% endblock %}
+
+{% block content %}
+
+<div style="max-width:500px;margin:70px auto;">
+
+    <div class="form-card">
+
+        <div style="text-align:center;margin-bottom:25px;">
+
+            <div style="font-size:45px;">
+                🏋️
+            </div>
+
+            <h1 style="
+                font-family:'Playfair Display',serif;
+                margin:5px 0;
+            ">
+                Welcome Back
+            </h1>
+
+            <p style="color:#7d7074;">
+                Continue your fitness journey.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+
+            <button
+                type="submit"
+                class="btn"
+                style="width:100%;"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div style="
+            text-align:center;
+            margin-top:20px;
+        ">
+
+            <a
+                href="{% url 'password_reset' %}"
+                style="
+                    color:#9b5058;
+                    text-decoration:none;
+                    font-size:14px;
+                "
+            >
+                Forgot your password?
+            </a>
+
+        </div>
+
+
+        <p style="
+            text-align:center;
+            color:#7d7074;
+            margin-top:15px;
+        ">
+
+            Don't have an account?
+
+            <a
+                href="{% url 'signup' %}"
+                style="
+                    color:#9b5058;
+                    font-weight:600;
+                "
+            >
+                Sign Up
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

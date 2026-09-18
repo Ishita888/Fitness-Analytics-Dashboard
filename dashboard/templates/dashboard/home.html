@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}FitTrack - Your Fitness Journey{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>
+        Track. Analyse.<br>
+        Become Better. 🌿
+    </h1>
+
+    <p>
+        Keep track of your daily fitness habits,
+        understand your progress through analytics,
+        and build healthier routines one day at a time.
+    </p>
+
+
+    <div style="margin-top:30px;">
+
+        <a
+            href="{% url 'signup' %}"
+            class="btn btn-light"
+        >
+            Get Started →
+        </a>
+
+
+        <a
+            href="{% url 'login' %}"
+            class="btn"
+            style="
+                background:rgba(255,255,255,0.15);
+                border:1px solid rgba(255,255,255,0.4);
+                margin-left:8px;
+            "
+        >
+            Login
+        </a>
+
+    </div>
+
+</section>
+
+
+<div class="grid">
+
+
+    <div class="card">
+
+        <div style="font-size:35px;">
+            🔥
+        </div>
+
+        <h2>
+            Track Calories
+        </h2>
+
+        <p style="color:#7d7074;">
+            Record calories burned and consumed
+            to understand your daily energy balance.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div style="font-size:35px;">
+            📈
+        </div>
+
+        <h2>
+            See Your Progress
+        </h2>
+
+        <p style="color:#7d7074;">
+            Visualise your weight, steps,
+            sleep, water and calorie trends.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div style="font-size:35px;">
+            🎯
+        </div>
+
+        <h2>
+            Reach Your Goals
+        </h2>
+
+        <p style="color:#7d7074;">
+            Set fitness goals and stay consistent
+            with your daily habits.
+        </p>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

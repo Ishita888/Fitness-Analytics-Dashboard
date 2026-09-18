@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - FitTrack{% endblock %}
+
+{% block content %}
+
+<div style="max-width:520px;margin:60px auto;">
+
+    <div class="form-card">
+
+        <div style="text-align:center;margin-bottom:25px;">
+
+            <div style="font-size:45px;">
+                🌿
+            </div>
+
+            <h1 style="
+                font-family:'Playfair Display',serif;
+                margin:5px 0;
+            ">
+                Create Your Account
+            </h1>
+
+            <p style="color:#7d7074;">
+                Start tracking your fitness journey.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+
+            <button
+                type="submit"
+                class="btn"
+                style="width:100%;"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <p style="
+            text-align:center;
+            margin-top:20px;
+            color:#7d7074;
+        ">
+
+            Already have an account?
+
+            <a
+                href="{% url 'login' %}"
+                style="color:#9b5058;font-weight:600;"
+            >
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

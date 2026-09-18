@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FitTrack{% endblock %}
+
+{% block content %}
+
+<h1>Welcome, {{ user.username }}! 🏋️</h1>
+
+<p>Welcome to your Fitness Analytics Dashboard.</p>
+
+
+<!-- TODAY'S SUMMARY -->
+<div class="card">
+
+    <h2>Today's Fitness Summary</h2>
+
+    {% if today_entry %}
+
+    <div class="grid">
+
+        <div class="stat">
+            <h3>Weight</h3>
+            <p>
+                {% if today_entry.weight %}
+                    {{ today_entry.weight }} kg
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>BMI</h3>
+            <p>
+                {% if today_entry.bmi %}
+                    {{ today_entry.bmi }}
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Calories Burned</h3>
+            <p>
+                {% if today_entry.calories_burned %}
+                    {{ today_entry.calories_burned }} kcal
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Food Intake</h3>
+            <p>
+                {% if today_entry.food_intake %}
+                    {{ today_entry.food_intake }} kcal
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Steps</h3>
+            <p>
+                {% if today_entry.steps %}
+                    {{ today_entry.steps }}
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Water</h3>
+            <p>
+                {% if today_entry.water_intake %}
+                    {{ today_entry.water_intake }} L
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Sleep</h3>
+            <p>
+                {% if today_entry.sleep_hours %}
+                    {{ today_entry.sleep_hours }} hours
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Exercise</h3>
+            <p>
+                {% if today_entry.exercise == "Other" %}
+                    {{ today_entry.custom_exercise }}
+                {% elif today_entry.exercise %}
+                    {{ today_entry.exercise }}
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Workout Duration</h3>
+            <p>
+                {% if today_entry.exercises %}
+
+    {% for exercise in today_entry.exercises %}
+
+        <span class="goal-badge">
+            {{ exercise }}
+        </span>
+
+    {% endfor %}
+
+{% else %}
+
+    —
+
+{% endif %}
+            </p>
+        </div>
+
+        <div class="stat">
+            <h3>Fitness Goal</h3>
+            <p>
+                {% if today_entry.fitness_goal %}
+                    {{ today_entry.fitness_goal }}
+                {% else %}
+                    —
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <p>You haven't entered your fitness data for today.</p>
+
+    <a href="{% url 'add_entry' %}" class="btn">
+        Add Today's Data
+    </a>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ANALYTICS SUMMARY -->
+<div class="card">
+
+    <h2>Analytics Overview</h2>
+
+    <div class="grid">
+
+        <div class="stat">
+            <h3>Entries in Last 7 Days</h3>
+            <p>{{ week_entries.count }}</p>
+        </div>
+
+        <div class="stat">
+            <h3>Entries in Last 30 Days</h3>
+            <p>{{ month_entries.count }}</p>
+        </div>
+
+        <div class="stat">
+            <h3>Total Entries</h3>
+            <p>{{ total_entries }}</p>
+        </div>
+
+        <div class="stat">
+            <h3>Total Calories Burned</h3>
+            <p>{{ total_calories_burned }} kcal</p>
+        </div>
+
+        <div class="stat">
+            <h3>Total Food Intake</h3>
+            <p>{{ total_food_intake }} kcal</p>
+        </div>
+
+        <div class="stat">
+            <h3>Total Steps</h3>
+            <p>{{ total_steps }}</p>
+        </div>
+
+        <div class="stat">
+            <h3>Average Water</h3>
+            <p>{{ avg_water }} L</p>
+        </div>
+
+        <div class="stat">
+            <h3>Average Sleep</h3>
+            <p>{{ avg_sleep }} hours</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CHARTS -->
+
+<div class="charts">
+
+    <!-- WEIGHT CHART -->
+    <div class="chart-card">
+
+        <h2>Weight Trend</h2>
+
+        <canvas id="weightChart"></canvas>
+
+    </div>
+
+
+    <!-- CALORIES CHART -->
+    <div class="chart-card">
+
+        <h2>Calories: Burned vs Consumed</h2>
+
+        <canvas id="calorieChart"></canvas>
+
+    </div>
+
+
+    <!-- STEPS CHART -->
+    <div class="chart-card">
+
+        <h2>Steps</h2>
+
+        <canvas id="stepsChart"></canvas>
+
+    </div>
+
+
+    <!-- WATER CHART -->
+    <div class="chart-card">
+
+        <h2>Water Intake</h2>
+
+        <canvas id="waterChart"></canvas>
+
+    </div>
+
+
+    <!-- SLEEP CHART -->
+    <div class="chart-card">
+
+        <h2>Sleep Duration</h2>
+
+        <canvas id="sleepChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- SAFELY PASS DJANGO DATA TO JAVASCRIPT -->
+{{ chart_dates|json_script:"chart-dates" }}
+{{ weight_data|json_script:"weight-data" }}
+{{ calories_data|json_script:"calories-data" }}
+{{ food_data|json_script:"food-data" }}
+{{ steps_data|json_script:"steps-data" }}
+{{ water_data|json_script:"water-data" }}
+{{ sleep_data|json_script:"sleep-data" }}
+
+
+<script>
+
+const chartDates =
+    JSON.parse(
+        document.getElementById("chart-dates").textContent
+    );
+
+const weightData =
+    JSON.parse(
+        document.getElementById("weight-data").textContent
+    );
+
+const caloriesData =
+    JSON.parse(
+        document.getElementById("calories-data").textContent
+    );
+
+const foodData =
+    JSON.parse(
+        document.getElementById("food-data").textContent
+    );
+
+const stepsData =
+    JSON.parse(
+        document.getElementById("steps-data").textContent
+    );
+
+const waterData =
+    JSON.parse(
+        document.getElementById("water-data").textContent
+    );
+
+const sleepData =
+    JSON.parse(
+        document.getElementById("sleep-data").textContent
+    );
+
+
+// -----------------------------
+// WEIGHT CHART
+// -----------------------------
+
+new Chart(
+    document.getElementById("weightChart"),
+    {
+        type: "line",
+
+        data: {
+            labels: chartDates,
+
+            datasets: [
+                {
+                    label: "Weight (kg)",
+                    data: weightData,
+
+                    borderWidth: 3,
+
+                    tension: 0.3,
+
+                    fill: false
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    }
+);
+
+
+// -----------------------------
+// CALORIES CHART
+// -----------------------------
+
+new Chart(
+    document.getElementById("calorieChart"),
+    {
+        type: "bar",
+
+        data: {
+            labels: chartDates,
+
+            datasets: [
+
+                {
+                    label: "Calories Burned",
+
+                    data: caloriesData,
+
+                    borderWidth: 1
+                },
+
+                {
+                    label: "Calories Consumed",
+
+                    data: foodData,
+
+                    borderWidth: 1
+                }
+
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+);
+
+
+// -----------------------------
+// STEPS CHART
+// -----------------------------
+
+new Chart(
+    document.getElementById("stepsChart"),
+    {
+        type: "line",
+
+        data: {
+            labels: chartDates,
+
+            datasets: [
+                {
+                    label: "Steps",
+
+                    data: stepsData,
+
+                    borderWidth: 3,
+
+                    tension: 0.3,
+
+                    fill: false
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+);
+
+
+// -----------------------------
+// WATER CHART
+// -----------------------------
+
+new Chart(
+    document.getElementById("waterChart"),
+    {
+        type: "bar",
+
+        data: {
+            labels: chartDates,
+
+            datasets: [
+                {
+                    label: "Water Intake (L)",
+
+                    data: waterData,
+
+                    borderWidth: 1
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+);
+
+
+// -----------------------------
+// SLEEP CHART
+// -----------------------------
+
+new Chart(
+    document.getElementById("sleepChart"),
+    {
+        type: "line",
+
+        data: {
+            labels: chartDates,
+
+            datasets: [
+                {
+                    label: "Sleep (hours)",
+
+                    data: sleepData,
+
+                    borderWidth: 3,
+
+                    tension: 0.3,
+
+                    fill: false
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+);
+
+</script>
+
+
+{% endblock %}

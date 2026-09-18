@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - FitTrack{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1>Your Profile 👤</h1>
+
+        <p>
+            Manage your FitTrack account information.
+        </p>
+    </div>
+
+    <div class="page-note">
+        A healthier<br>
+        happier you ♡
+    </div>
+
+</div>
+
+
+<div class="form-card">
+
+    <h2>Account Information</h2>
+
+    <p style="color:#7d7074; margin-bottom:25px;">
+        Update your username or email address below.
+    </p>
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                ✓ Save Changes
+            </button>
+
+
+            <a
+                href="{% url 'change_password' %}"
+                class="btn"
+                style="
+                    background:#f2e4e3;
+                    color:#7f3f47;
+                "
+            >
+                🔒 Change Password
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Fitness History - FitTrack{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>
+            Fitness History 📅
+        </h1>
+
+        <p>
+            All your logged fitness data in one place.
+        </p>
+
+    </div>
+
+    <div class="page-note">
+        Consistency<br>
+        creates results ♡
+    </div>
+
+</div>
+
+
+{% if entries %}
+
+<div class="table-wrapper">
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Date</th>
+
+            <th>Weight</th>
+
+            <th>BMI</th>
+
+            <th>Calories Burned</th>
+
+            <th>Food Intake</th>
+
+            <th>Steps</th>
+
+            <th>Water</th>
+
+            <th>Sleep</th>
+
+            <th>Exercise</th>
+
+            <th>Duration</th>
+
+            <th>Goal</th>
+
+            <th>Actions</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        {% for entry in entries %}
+
+        <tr>
+
+            <td>
+                <strong>
+                    {{ entry.date|date:"M d, Y" }}
+                </strong>
+            </td>
+
+
+            <td>
+                {% if entry.weight %}
+                    {{ entry.weight }} kg
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.bmi %}
+                    {{ entry.bmi }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.calories_burned %}
+                    {{ entry.calories_burned }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.food_intake %}
+                    {{ entry.food_intake }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.steps %}
+                    {{ entry.steps }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.water_intake %}
+                    {{ entry.water_intake }} L
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+                {% if entry.sleep_hours %}
+                    {{ entry.sleep_hours }} hrs
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+
+            <td>
+
+                {% if entry.exercises %}
+
+    {% for exercise in entry.exercises %}
+
+        <span class="goal-badge">
+            {{ exercise }}
+        </span>
+
+    {% endfor %}
+
+{% else %}
+
+    —
+
+{% endif %}
+
+            </td>
+
+
+            <td>
+
+                {% if entry.workout_duration %}
+
+                    {{ entry.workout_duration }} min
+
+                {% else %}
+
+                    —
+
+                {% endif %}
+
+            </td>
+
+
+            <td>
+
+                {% if entry.fitness_goal %}
+
+                    <span class="goal-badge">
+                        {{ entry.fitness_goal }}
+                    </span>
+
+                {% else %}
+
+                    —
+
+                {% endif %}
+
+            </td>
+
+
+            <td>
+
+                <div class="action-buttons">
+
+                    <a
+                        href="{% url 'edit_entry' entry.id %}"
+                        class="edit-btn"
+                    >
+                        ✎
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'delete_entry' entry.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="delete-btn"
+                            onclick="return confirm('Delete this fitness entry?');"
+                        >
+                            🗑
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+
+<div style="margin-top:25px;">
+
+    <a
+        href="{% url 'add_entry' %}"
+        class="btn"
+    >
+        ＋ Add New Entry
+    </a>
+
+</div>
+
+
+{% else %}
+
+
+<div class="card empty">
+
+    <div class="empty-icon">
+        🌱
+    </div>
+
+    <h2>
+        No fitness data yet
+    </h2>
+
+    <p>
+        Start tracking your progress by adding your first entry.
+    </p>
+
+    <a
+        href="{% url 'add_entry' %}"
+        class="btn"
+    >
+        ＋ Add First Entry
+    </a>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}

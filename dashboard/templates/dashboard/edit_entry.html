@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Fitness Data - FitTrack{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>
+            Edit Fitness Data ✎
+        </h1>
+
+        <p>
+            Update your fitness information.
+        </p>
+
+    </div>
+
+    <div class="page-note">
+        Progress isn't perfect.<br>
+        It's consistent ♡
+    </div>
+
+</div>
+
+
+<div class="form-card">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        {{ form.non_field_errors }}
+
+
+        <p>
+            {{ form.date.label_tag }}
+            {{ form.date }}
+            {{ form.date.errors }}
+        </p>
+
+
+        <p>
+            {{ form.weight.label_tag }}
+            {{ form.weight }}
+            {{ form.weight.errors }}
+        </p>
+
+
+        <p>
+            {{ form.height.label_tag }}
+            {{ form.height }}
+            {{ form.height.errors }}
+        </p>
+
+
+        <p>
+            {{ form.calories_burned.label_tag }}
+            {{ form.calories_burned }}
+            {{ form.calories_burned.errors }}
+        </p>
+
+
+        <p>
+            {{ form.food_intake.label_tag }}
+            {{ form.food_intake }}
+            {{ form.food_intake.errors }}
+        </p>
+
+
+        <p>
+            {{ form.steps.label_tag }}
+            {{ form.steps }}
+            {{ form.steps.errors }}
+        </p>
+
+
+        <p>
+            {{ form.water_intake.label_tag }}
+            {{ form.water_intake }}
+            {{ form.water_intake.errors }}
+        </p>
+
+
+        <p>
+            {{ form.sleep_hours.label_tag }}
+            {{ form.sleep_hours }}
+            {{ form.sleep_hours.errors }}
+        </p>
+
+
+        <div class="exercise-section">
+
+            <label>
+                Exercises
+            </label>
+
+            <p style="
+                color:#7d7074;
+                font-size:13px;
+            ">
+                Select all exercises you did today.
+            </p>
+
+            {{ form.exercises }}
+
+            {{ form.exercises.errors }}
+
+        </div>
+
+
+        <p>
+            {{ form.workout_duration.label_tag }}
+            {{ form.workout_duration }}
+            {{ form.workout_duration.errors }}
+        </p>
+
+
+        <p>
+            {{ form.fitness_goal.label_tag }}
+            {{ form.fitness_goal }}
+            {{ form.fitness_goal.errors }}
+        </p>
+
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                ✓ Update Data
+            </button>
+
+
+            <a
+                href="{% url 'history' %}"
+                class="btn"
+                style="
+                    background:#f2e4e3;
+                    color:#7f3f47;
+                "
+            >
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
